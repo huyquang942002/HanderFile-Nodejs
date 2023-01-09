@@ -1,46 +1,49 @@
+const fs = require("fs");
+const path = require("path");
+const dir = "./category";
 
-var fs = require("fs");
-
-var path = require("path");
-
-// Cho biết đường dẫn hiện tại
-var dirPath = path.resolve(__dirname); // D:\Sprint3
-
-var txtList;
-var imgList;
-
-var type = fs.readdir(dirPath, function (err, files) {
-  txtList = files.filter(function (e) {
-    return path.extname(e).toLowerCase() === ".txt";
-  });
-
-  imgList = files.filter(function (e) {
-    return path.extname(e).toLowerCase() === ".jpg";
-  });
-
-  try {
-    txtList.forEach((file) => {
-      var source = "./" + file;
-      var target = "./texts/" + file;
-      fs.renameSync(source, target);
-      console.log(`Moved ${source} to ${target}`);
-    });
-
-    imgList.forEach((file) => {
-      var source = "./" + file;
-      var target = "./images/" + file;
-      fs.renameSync(source, target);
-      console.log(`Moved ${source} to ${target}`);
-    });
-
-    const { move } = require("./move.js");
-
-  } catch (err) {
-    console.log(err);
+function sortName(lastPath) {
+  if (lastPath === ".txt" || lastPath === ".docx") {
+    return `texts`;
+  } else if (lastPath === ".png" || lastPath === ".jpg") {
+    return `images`;
+  } else if (lastPath === ".sh") {
+    return `bash`;
   }
+    return ``;
+}
+
+// Read the contents of the directory
+var type = fs.readdir(dir, (err, files) => {
+  if (err) {
+    console.error(`Error reading directory ${dir}: ${err}`);
+    return;
+  }
+
+  files.forEach((file) => {
+    // Get full information of file
+    fs.stat(`${dir}/${file}`, (err, stat) => {
+      if (err) {
+        console.error(`Error getting file size for ${file}: ${err}`);
+        return;
+      }
+
+      const lastPath = path.extname(file);
+
+      const sizeString = sortName(lastPath);
+      if (!fs.existsSync(`${dir}/${sizeString}`)) {
+        fs.mkdirSync(`${dir}/${sizeString}`);
+      }
+
+      // Di chuyển file vào thư mục chính
+      fs.rename(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
+        if (err) {
+          console.error(`Error moving file ${file}: ${err}`);
+        }
+      });
+    });
+  });
 });
-
-
 
 module.exports = {
   type,

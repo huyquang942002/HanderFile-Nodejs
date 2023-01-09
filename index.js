@@ -26,7 +26,8 @@ if (options.modify) {
 }
 
 if (options.name) {
-  const { name } = require("./SortByName.js");
+  const { nameImages } = require("./SortByName.js");
+  const { nameTexts } = require("./SortByName.js");
 }
 
 

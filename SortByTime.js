@@ -13,7 +13,7 @@ thisYear.setMonth(0, 1);
 
 
 
-const dir = "./category/images";
+const dir = "./category";
 
 function sort(mtime) {
   // console.log('mtime : ' + mtime)
@@ -30,7 +30,7 @@ function sort(mtime) {
     // console.log("year : " + thisYear);
     return `this_year`;
   } else {
-    return `order : `;
+    return ``;
   }
 }
 

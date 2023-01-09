@@ -2,6 +2,10 @@ const fs = require("fs");
 
 const dir = "./category/images";
 
+const dir1 = "./category/texts";
+
+
+
 function sortName(firstLetter) {
   if (
     firstLetter === "A" ||
@@ -46,13 +50,13 @@ function sortName(firstLetter) {
     )  {
     return `U-X`;
 }   else{
-    return `Order`;
+    return ``;
 }   
     
 }
 
 // Read the contents of the directory
-var name = fs.readdir(dir, (err, files) => {
+var nameImages = fs.readdir(dir, (err, files) => {
   if (err) {
     console.error(`Error reading directory ${dir}: ${err}`);
     return;
@@ -70,7 +74,9 @@ var name = fs.readdir(dir, (err, files) => {
 
           const sizeString = sortName(firstLetter);
           if (!fs.existsSync(`${dir}/${sizeString}`)) {
+
               fs.mkdirSync(`${dir}/${sizeString}`);
+
             }
 
       // Di chuyển file vào thư mục chính
@@ -83,6 +89,38 @@ var name = fs.readdir(dir, (err, files) => {
   });
 });
 
+var nameTexts = fs.readdir(dir1, (err, files) => {
+  if (err) {
+    console.error(`Error reading directory ${dir1}: ${err}`);
+    return;
+  }
+
+  files.forEach((file) => {
+    // Xác định kích thước của file
+    fs.stat(`${dir1}/${file}`, (err, stat) => {
+      if (err) {
+        console.error(`Error getting file size for ${file}: ${err}`);
+        return;
+      }
+
+      const firstLetter = file[0].toUpperCase();
+
+      const sizeString = sortName(firstLetter);
+      if (!fs.existsSync(`${dir1}/${sizeString}`)) {
+        fs.mkdirSync(`${dir1}/${sizeString}`);
+      }
+
+      // Di chuyển file vào thư mục chính
+      fs.rename(`${dir1}/${file}`, `${dir1}/${sizeString}/${file}`, (err) => {
+        if (err) {
+          console.error(`Error moving file ${file}: ${err}`);
+        }
+      });
+    });
+  });
+});
+
 module.exports = {
-  name,
+  nameImages,
+  nameTexts,
 };
