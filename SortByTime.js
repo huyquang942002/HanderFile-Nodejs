@@ -17,7 +17,7 @@ const dir = "./category";
 
 function sort(mtime) {
   // console.log('mtime : ' + mtime)
-  if (mtime <= today && mtime > thisWeek) {
+    if (mtime <= today && mtime > thisWeek) {
     // console.log("today : " + today);
     return `today`;
   } else if (mtime <= thisWeek && mtime > thisMonth) {
@@ -58,7 +58,7 @@ var modify = fs.readdir(dir, (err, files) => {
       }
 
       // Di chuyển file vào thư mục chính
-      fs.rename(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
+      fs.copyFile(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
         if (err) {
           console.error(`Error moving file ${file}: ${err}`);
         }

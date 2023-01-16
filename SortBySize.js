@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-const dir = "./category/images";
+const dir = "./category";
 
 function sizeToString(size) {
 
@@ -39,7 +39,7 @@ var size =  fs.readdir(dir, (err, files) => {
       }
 
       // Di chuyển file vào thư mục chính
-      fs.rename(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
+      fs.copyFile(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
         if (err) {
           console.error(`Error moving file ${file}: ${err}`);
         }
