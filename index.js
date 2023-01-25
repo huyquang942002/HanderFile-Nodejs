@@ -5,11 +5,16 @@ program
   .option("--type, --type", "handle file")
   .option("--size, --size", "handle file")
   .option("--modify, --modify", "handle file")
-  .option("--name, --name", "handle file"); 
+  .option("--name, --name", "handle file")
+  .option("--type --name, --typename", "handle file");
 
 program.parse(process.argv)
 
 const options = program.opts();
+
+if (options.typename) {
+  console.log("hello world");
+}
 
 if(options.type){
   const { type } = require("./SortByType.js");
@@ -31,11 +36,13 @@ if (options.name) {
 
 let check = process.argv.slice(2, 3).join("");
 
+let myArgs = process.argv.length;
+
 if (check == "." && check.length < 2) {
   console.log("please add option");
 }
 
-if (check == "./" && check.length <= 2) {
+if (check == "./"  && myArgs < 4) {
   console.log("please add options");
 }
 

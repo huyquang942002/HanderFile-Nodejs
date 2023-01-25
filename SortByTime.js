@@ -11,9 +11,9 @@ thisMonth.setDate(1);
 const thisYear = new Date();
 thisYear.setMonth(0, 1);
 
+var myArg = process.argv.slice(2, 3).join("");
 
-
-const dir = "./category";
+const dir = myArg;
 
 function sort(mtime) {
   // console.log('mtime : ' + mtime)

@@ -1,6 +1,8 @@
 const fs = require("fs");
 
-const dir = "./category";
+var myArg = process.argv.slice(2, 3).join("");
+
+const dir = myArg;
 
 function sizeToString(size) {
 

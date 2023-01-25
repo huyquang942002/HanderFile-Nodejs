@@ -1,8 +1,19 @@
 const fs = require("fs");
 
-const dir = "./category/images";
 
-const dir1 = "./category/texts";
+var myArg = process.argv.slice(2, 3).join("");
+
+var myArgs = process.argv.slice(4).join("");
+
+var str = myArgs.split(/[,-]/);
+
+var texts = str.find((element) => element === "texts");
+
+var images = str.find((element) => element === "images");
+
+var dir = `${myArg}/${images}`;
+
+var dir1 = `${myArg}/${texts}`;
 
 
 
@@ -111,7 +122,7 @@ var nameTexts = fs.readdir(dir1, (err, files) => {
       }
 
       // Di chuyển file vào thư mục chính
-      fs.copyFile(`${dir1}/${file}`, `${dir1}/${sizeString}/${file}`, (err) => {
+      fs.rename(`${dir1}/${file}`, `${dir1}/${sizeString}/${file}`, (err) => {
         if (err) {
           console.error(`Error moving file ${file}: ${err}`);
         }

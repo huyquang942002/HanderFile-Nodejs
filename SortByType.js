@@ -11,8 +11,9 @@ if(process.argv.length <= 4){
   var myArg = process.argv.slice(2,3).join("");
 
   var myArgs = process.argv.slice(4).join("");
+
+  var str = myArgs.split(/[,-]/);
   
-  var str = myArgs.split(",");
   
   var texts = str.find((element) => element === "texts");
   
@@ -30,7 +31,7 @@ function sortName(lastPath) {
   } else if (lastPath === ".sh") {
     return `bash`;
   }else{
-    return `order`;
+    return ``;
   }
 }
 
