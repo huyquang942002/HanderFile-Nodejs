@@ -91,7 +91,7 @@ var nameImages = fs.readdir(dir, (err, files) => {
             }
 
       // Di chuyển file vào thư mục chính
-      fs.rename(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
+      fs.copyFile(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
         if (err) {
           console.error(`Error moving file ${file}: ${err}`);
         }
@@ -122,7 +122,7 @@ var nameTexts = fs.readdir(dir1, (err, files) => {
       }
 
       // Di chuyển file vào thư mục chính
-      fs.rename(`${dir1}/${file}`, `${dir1}/${sizeString}/${file}`, (err) => {
+      fs.copyFile(`${dir1}/${file}`, `${dir1}/${sizeString}/${file}`, (err) => {
         if (err) {
           console.error(`Error moving file ${file}: ${err}`);
         }

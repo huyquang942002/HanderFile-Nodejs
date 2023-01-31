@@ -6,37 +6,31 @@ program
   .option("--size, --size", "handle file")
   .option("--modify, --modify", "handle file")
   .option("--name, --name", "handle file")
-  .option("--type --name, --typename", "handle file");
 
 program.parse(process.argv)
 
 const options = program.opts();
 
-if (options.typename) {
-  console.log("hello world");
-}
+var myArgs = process.argv.length;
 
-if(options.type){
+if (options.type && myArgs < 5) {
   const { type } = require("./SortByType.js");
 }
 
-if (options.size) {
+if (options.size && myArgs < 5) {
   const { size } = require("./SortBySize.js");
 }
 
-if (options.modify) {
+if (options.modify && myArgs < 5) {
   const { modify } = require("./SortByTime.js");
 }
 
-if (options.name) {
-  const { nameImages } = require("./SortByName.js");
-  const { nameTexts } = require("./SortByName.js");
+if (options.name && myArgs < 5) {
+    const { name } = require("./AllSortByName.js");
 }
 
 
 let check = process.argv.slice(2, 3).join("");
-
-let myArgs = process.argv.length;
 
 if (check == "." && check.length < 2) {
   console.log("please add option");
@@ -45,6 +39,24 @@ if (check == "." && check.length < 2) {
 if (check == "./"  && myArgs < 4) {
   console.log("please add options");
 }
+
+
+const argWithSpace = process.argv.slice(2).join(" ");
+
+var myArg = process.argv.slice(2, 3).join("");
+
+switch (argWithSpace) {
+  case `${myArg} --type images,texts --name`:
+    const { type } = require("./SortByType.js");
+    const { nameImages } = require("./SortByName.js");
+    const { nameTexts } = require("./SortByName.js");
+    break;
+  
+  default:
+}
+
+
+
 
 
 
