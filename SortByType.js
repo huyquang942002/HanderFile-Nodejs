@@ -7,20 +7,20 @@ if(process.argv.length <= 4){
   return 0;
 }
 
-  // Folder need handle
+  // ./c
   var myArg = process.argv.slice(2,3).join("");
 
   var myArgs = process.argv.slice(4).join("");
 
   var str = myArgs.split(/[,-]/);
   
-  
   var texts = str.find((element) => element === "texts");
   
   var images = str.find((element) => element === "images");
 
-
+// ./c
 const dir = myArg;
+
 
 function sortName(lastPath) {
 
@@ -36,36 +36,37 @@ function sortName(lastPath) {
 }
 
 // Read the contents of the directory
-var type = fs.readdir(dir, (err, files) => {
+var type = 
+
+fs.readdir(dir, (err, files) => {
   if (err) {
     console.error(`Error reading directory ${dir}: ${err}`);
     return;
   }
 
   files.forEach((file) => {
-    // Get full information of file
-    fs.stat(`${dir}/${file}`, (err, stat) => {
-      if (err) {
-        console.error(`Error getting file size for ${file}: ${err}`);
-        return;
-      }
+   
+      var lastPath = path.extname(file);
 
-      const lastPath = path.extname(file);
-
-      const sizeString = sortName(lastPath);
+      var sizeString = sortName(lastPath);
+      
       if (!fs.existsSync(`${dir}/${sizeString}`)) {
-        fs.mkdirSync(`${dir}/${sizeString}`);
+         fs.mkdirSync(`${dir}/${sizeString}`);
       }
 
       // Di chuyển file vào thư mục chính
       fs.copyFile(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
+
         if (err) {
           console.error(`Error moving file ${file}: ${err}`);
+        }else{
+          var a = `${dir}/${sizeString}`;
+          console.log(a);
         }
       });
     });
-  });
 });
+
 
 module.exports = {
   type,

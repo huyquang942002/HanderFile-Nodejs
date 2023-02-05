@@ -11,9 +11,13 @@ var texts = str.find((element) => element === "texts");
 
 var images = str.find((element) => element === "images");
 
-var dir = `${myArg}/${images}`;
+// var dir = `${myArg}/${images}`;
 
-var dir1 = `${myArg}/${texts}`;
+// var dir1 = `${myArg}/${texts}`;
+
+var dir = `"./c/images"`;
+
+var dir1 = `"./c/texts"`;
 
 
 
@@ -67,7 +71,9 @@ function sortName(firstLetter) {
 }
 
 // Read the contents of the directory
-var nameImages = fs.readdir(dir, (err, files) => {
+var nameImages = () => {
+
+ fs.readdir(dir, (err, files) => {
   if (err) {
     console.error(`Error reading directory ${dir}: ${err}`);
     return;
@@ -84,6 +90,8 @@ var nameImages = fs.readdir(dir, (err, files) => {
       const firstLetter = (file[0].toUpperCase());
 
           const sizeString = sortName(firstLetter);
+          
+
           if (!fs.existsSync(`${dir}/${sizeString}`)) {
 
               fs.mkdirSync(`${dir}/${sizeString}`);
@@ -99,8 +107,11 @@ var nameImages = fs.readdir(dir, (err, files) => {
     });
   });
 });
+}
 
-var nameTexts = fs.readdir(dir1, (err, files) => {
+var nameTexts = () => {
+
+fs.readdir(dir1, (err, files) => {
   if (err) {
     console.error(`Error reading directory ${dir1}: ${err}`);
     return;
@@ -130,8 +141,10 @@ var nameTexts = fs.readdir(dir1, (err, files) => {
     });
   });
 });
+}
 
 module.exports = {
   nameImages,
-  nameTexts,
+  nameTexts
 };
+
