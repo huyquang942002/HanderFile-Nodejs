@@ -98,7 +98,7 @@ function sortName(lastPath) {
   }
 }
 
-var typename = fs.readdir(dir, (err, files) => {
+var typeName = fs.readdir(dir, (err, files) => {
   if (err) {
     console.error(`Error reading directory ${dir}: ${err}`);
     return;
@@ -136,7 +136,7 @@ var typename = fs.readdir(dir, (err, files) => {
   
                   }
                   // Di chuyển file vào thư mục chính
-                  fs.rename(`${dirImages}/${file}`, `${dirImages}/${sizeStringImages}/${file}`, (err) => {
+                  fs.copyFile(`${dirImages}/${file}`, `${dirImages}/${sizeStringImages}/${file}`, (err) => {
                   });
                 }
               });
@@ -156,7 +156,7 @@ var typename = fs.readdir(dir, (err, files) => {
 
                 }
                 // Di chuyển file vào thư mục chính
-                fs.rename(`${dirTexts}/${file}`, `${dirTexts}/${sizeStringTexts}/${file}`, (err) => {
+                fs.copyFile(`${dirTexts}/${file}`, `${dirTexts}/${sizeStringTexts}/${file}`, (err) => {
                 });
             }
             });
@@ -165,106 +165,123 @@ var typename = fs.readdir(dir, (err, files) => {
     });
 });
 
-var typeNameSize = fs.readdir(dir, (err, files) => {
-    if (err) {
-      console.error(`Error reading directory ${dir}: ${err}`);
-      return;
-    }
+// const typeNameSize = fs.readdir(dir, (err, files) => {
+//     if (err) {
+//       console.error(`Error reading directory ${dir}: ${err}`);
+//       return;
+//     }
   
-    files.forEach((file) => {
+//     files.forEach((file) => {
      
-        var lastPath = path.extname(file);
+//         var lastPath = path.extname(file);
   
-        const sizeString = sortName(lastPath);
+//         const sizeString = sortName(lastPath);
         
-        if (!fs.existsSync(`${dir}/${sizeString}`)) {
-           fs.mkdirSync(`${dir}/${sizeString}`);
-        }
+//         if (!fs.existsSync(`${dir}/${sizeString}`)) {
+//            fs.mkdirSync(`${dir}/${sizeString}`);
+//         }
   
-        // Di chuyển file vào thư mục chính
-        fs.copyFile(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
+//         // Di chuyển file vào thư mục chính
+//         fs.copyFile(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
   
-              var dirImages = "./c/images";
+//               var dirImages = "./c/images";
   
-              var dirTexts = "./c/texts";
+//               var dirTexts = "./c/texts";
   
-              fs.readdir(dirImages, (err, files) => {
-                  if (err) throw err;
+//               fs.readdir(dirImages, (err, files) => {
+//                   if (err) throw err;
                 
-                  for (const file of files) {
+//                   for (const file of files) {
                     
-                    const firstLetterImages = (file[0].toUpperCase());
+//                     const firstLetterImages = (file[0].toUpperCase());
   
-                    const sizeStringImages = sortNameName(firstLetterImages);
+//                     const sizeStringImages = sortNameName(firstLetterImages);
                 
-                    if (!fs.existsSync(`${dirImages}/${sizeStringImages}`)) {
+//                     if (!fs.existsSync(`${dirImages}/${sizeStringImages}`)) {
     
-                    fs.mkdirSync(`${dirImages}/${sizeStringImages}`);
+//                     fs.mkdirSync(`${dirImages}/${sizeStringImages}`);
     
-                    }
-                    // Di chuyển file vào thư mục chính
-                    fs.rename(`${dirImages}/${file}`, `${dirImages}/${sizeStringImages}/${file}`, (err) => {
+//                     }
+//                     // Di chuyển file vào thư mục chính
+//                     fs.rename(`${dirImages}/${file}`, `${dirImages}/${sizeStringImages}/${file}`, (err) => {
 
-                        // console.log(`${dirImages}/${sizeStringImages}/${file}`);
+//                         fs.readdir(`${dirImages}/${sizeStringImages}`, (err, files) => {
 
-
-                        fs.readdir(`${dirImages}/${sizeStringImages}`, (err, files) => {
-                            
-                            for(const files of file){
-    
-                                files.forEach((file) => {
-                                    // Xác định kích thước của file
-                                    fs.stat(`${dirImages}/${file}`, (err, stat) => {
-                                      if (err) {
-                                        console.error(`Error getting file size for ${file}: ${err}`);
-                                        return;
-                                      }
-                                
-                                      // Tạo thư mục mới cho file nếu nó chưa tồn tại
-                                      const sizeStringSize = sizeToString(stat.size);
-                                      if (!fs.existsSync(`${dirImages}/${sizeStringImages}/${sizeStringSize}`)) {
-                                        fs.mkdirSync(`${dirImages}/${sizeStringImages}/${sizeStringSize}`);
-                                      }
-                                
-                                      // Di chuyển file vào thư mục chính
-                                      fs.rename(`${dirImages}/${sizeStringImages}/${file}`, `${dirImages}/${sizeStringImages}/${sizeStringSize}/${file}`, (err) => {
-                                      });
-                                    });
-                                  });     
-                            }
-                        });
-
-
-                       
-                    });   
-                  }
-                });
+//                             files.forEach((file) => {
+//                               // Xác định kích thước của file
+//                               fs.stat(`${dirImages}/${sizeStringImages}/${file}`, (err, stat) => {
+//                                 if (err) {
+//                                   console.error(`Error getting file size for ${file}: ${err}`);
+//                                   return;
+//                                 }
+                          
+//                                 // Tạo thư mục mới cho file nếu nó chưa tồn tại
+//                                 const sizeStringSize = sizeToString(stat.size);
+//                                 if (!fs.existsSync(`${dirImages}/${sizeStringImages}/${sizeStringSize}`)) {
+//                                   fs.mkdirSync(`${dirImages}/${sizeStringImages}/${sizeStringSize}`);
+//                                 }
+                          
+//                                 // Di chuyển file vào thư mục chính
+//                                 fs.rename(`${dirImages}/${sizeStringImages}/${file}`, `${dirImages}/${sizeStringImages}/${sizeStringSize}/${file}`, (err) => {
+//                                   if (err) {
+//                                     console.error(`Error moving file ${file}: ${err}`);
+//                                   }
+//                                 });
+//                               });
+//                             });
+//                           });
+//                         });   
+//                       }   
+//                     });
   
-              fs.readdir(dirTexts, (err, files) => {
-              if (err) throw err;
+//               fs.readdir(dirTexts, (err, files) => {
+//               if (err) throw err;
               
-              for (const file of files) {
+//               for (const file of files) {
                   
-                  const firstLetterTexts = (file[0].toUpperCase());
+//                   const firstLetterTexts = (file[0].toUpperCase());
   
-                  const sizeStringTexts = sortNameName(firstLetterTexts);
+//                   const sizeStringTexts = sortNameName(firstLetterTexts);
               
-                  if (!fs.existsSync(`${dirTexts}/${sizeStringTexts}`)) {
+//                   if (!fs.existsSync(`${dirTexts}/${sizeStringTexts}`)) {
   
-                  fs.mkdirSync(`${dirTexts}/${sizeStringTexts}`);
+//                   fs.mkdirSync(`${dirTexts}/${sizeStringTexts}`);
   
-                  }
-                  // Di chuyển file vào thư mục chính
-                  fs.rename(`${dirTexts}/${file}`, `${dirTexts}/${sizeStringTexts}/${file}`, (err) => {
-                  });
-              }
-              });
+//                   }
+//                   // Di chuyển file vào thư mục chính
+//                   fs.rename(`${dirTexts}/${file}`, `${dirTexts}/${sizeStringTexts}/${file}`, (err) => {
+
+//                     fs.readdir(`${dirTexts}/${sizeStringTexts}`, (err, files) => {
+
+//                         files.forEach((file) => {
+//                           // Xác định kích thước của file
+//                           fs.stat(`${dirTexts}/${sizeStringTexts}/${file}`, (err, stat) => {
+//                             if (err) {
+//                               console.error(`Error getting file size for ${file}: ${err}`);
+//                               return;
+//                             }
+                      
+//                             // Tạo thư mục mới cho file nếu nó chưa tồn tại
+//                             const sizeStringSize = sizeToString(stat.size);
+//                             if (!fs.existsSync(`${dirTexts}/${sizeStringTexts}/${sizeStringSize}`)) {
+//                               fs.mkdirSync(`${dirTexts}/${sizeStringTexts}/${sizeStringSize}`);
+//                             }
+                      
+//                             // Di chuyển file vào thư mục chính
+//                             fs.rename(`${dirTexts}/${sizeStringTexts}/${file}`, `${dirTexts}/${sizeStringTexts}/${sizeStringSize}/${file}`, (err) => {
+//                               if (err) {
+//                                 console.error(`Error moving file ${file}: ${err}`);
+//                               }
+//                             });
+//                           });
+//                         });
+//                       });
+//                     });  
+//               }
+//               });
   
-        });
-      });
-  });
+//         });
+//       });
+//   });
 
 
-module.exports = {
-  typename,
-};

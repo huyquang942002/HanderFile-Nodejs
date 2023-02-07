@@ -17,9 +17,8 @@ const options = program.opts();
 
 var myArgs = process.argv.length;
 
-if (options.type && myArgs < 5) {
+if (options.type && myArgs <= 5) {
   const {type} = require("./SortByType.js")
-
 }
 
 if (options.size && myArgs < 5) {
@@ -54,7 +53,7 @@ if (check == "./" && myArgs < 4) {
 // }
 
 
-for (var i = 0; i <= 1; i++) {
-  const { typeNameSize } = require("./typename.js");
+for (var i = 0; i < 1; i++) {
+  const { typeName } = require("./typename.js");
 }
 

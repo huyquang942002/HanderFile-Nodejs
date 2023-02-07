@@ -80,12 +80,6 @@ var nameImages = () => {
   }
 
   files.forEach((file) => {
-    // Xác định kích thước của file
-    fs.stat(`${dir}/${file}`, (err, stat) => {
-      if (err) {
-        console.error(`Error getting file size for ${file}: ${err}`);
-        return;
-      }
 
       const firstLetter = (file[0].toUpperCase());
 
@@ -100,13 +94,9 @@ var nameImages = () => {
 
       // Di chuyển file vào thư mục chính
       fs.copyFile(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
-        if (err) {
-          console.error(`Error moving file ${file}: ${err}`);
-        }
       });
     });
   });
-});
 }
 
 var nameTexts = () => {
@@ -118,12 +108,6 @@ fs.readdir(dir1, (err, files) => {
   }
 
   files.forEach((file) => {
-    // Xác định kích thước của file
-    fs.stat(`${dir1}/${file}`, (err, stat) => {
-      if (err) {
-        console.error(`Error getting file size for ${file}: ${err}`);
-        return;
-      }
 
       const firstLetter = file[0].toUpperCase();
 
@@ -134,13 +118,9 @@ fs.readdir(dir1, (err, files) => {
 
       // Di chuyển file vào thư mục chính
       fs.copyFile(`${dir1}/${file}`, `${dir1}/${sizeString}/${file}`, (err) => {
-        if (err) {
-          console.error(`Error moving file ${file}: ${err}`);
-        }
       });
     });
   });
-});
 }
 
 module.exports = {

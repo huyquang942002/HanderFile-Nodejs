@@ -56,13 +56,6 @@ fs.readdir(dir, (err, files) => {
 
       // Di chuyển file vào thư mục chính
       fs.copyFile(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
-
-        if (err) {
-          console.error(`Error moving file ${file}: ${err}`);
-        }else{
-          var a = `${dir}/${sizeString}`;
-          console.log(a);
-        }
       });
     });
 });
