@@ -1,24 +1,6 @@
 const fs = require("fs");
 
-
-var myArg = process.argv.slice(2, 3).join("");
-
-var myArgs = process.argv.slice(4).join("");
-
-var str = myArgs.split(/[,-]/);
-
-var texts = str.find((element) => element === "texts");
-
-var images = str.find((element) => element === "images");
-
-// var dir = `${myArg}/${images}`;
-
-// var dir1 = `${myArg}/${texts}`;
-
-var dir = `"./c/images"`;
-
-var dir1 = `"./c/texts"`;
-
+const fss = require('fs-extra');
 
 
 function sortName(firstLetter) {
@@ -50,28 +32,65 @@ function sortName(firstLetter) {
     firstLetter === "P"
   ) {
     return `M-P`;
-  } else if(
-    firstLetter === 'Q' || 
-    firstLetter === 'R' || 
-    firstLetter === 'S' || 
-    firstLetter === 'T'
-    )  {
+  } else if (
+    firstLetter === "Q" ||
+    firstLetter === "R" ||
+    firstLetter === "S" ||
+    firstLetter === "T"
+  ) {
     return `Q-T`;
-}   else if(
-    firstLetter === 'U' || 
-    firstLetter === 'V' || 
-    firstLetter === 'W' || 
-    firstLetter === 'X'
-    )  {
+  } else if (
+    firstLetter === "U" ||
+    firstLetter === "V" ||
+    firstLetter === "W" ||
+    firstLetter === "X"
+  ) {
     return `U-X`;
-}   else{
+  } else {
     return ``;
-}   
-    
+  }
+}
+
+
+var getFinalName = (dir)=>{
+  fs.readdir(dir,(err,files)=>{
+    for(const file of files){
+      const filePath = `${dir}/${file}`;
+
+      fs.stat(filePath,(err,stats)=>{
+        const dirChilds = filePath.split();
+        if(stats.isDirectory()){
+          for(const dirChild of dirChilds){
+            getHeadName(dirChild);
+            getMidName(dirChild);
+          }
+        }
+
+      })
+    }
+  })
+}
+
+
+var getMidName = (dir)=>{
+  fs.readdir(dir,(err,files)=>{
+    for(const file of files){
+      const filePath = `${dir}/${file}`;
+
+      fs.stat(filePath,(err,stats)=>{
+        const dirChilds = filePath.split();
+          if(stats.isDirectory()){
+            for(const dirChild of dirChilds){
+              getHeadName(dirChild)
+            }
+          }
+      })
+    }
+  })
 }
 
 // Read the contents of the directory
-var nameImages = () => {
+const getHeadName = (dir)=>{
 
  fs.readdir(dir, (err, files) => {
   if (err) {
@@ -80,51 +99,38 @@ var nameImages = () => {
   }
 
   files.forEach((file) => {
-
-      const firstLetter = (file[0].toUpperCase());
-
-          const sizeString = sortName(firstLetter);
-          
-
-          if (!fs.existsSync(`${dir}/${sizeString}`)) {
-
-              fs.mkdirSync(`${dir}/${sizeString}`);
-
-            }
-
-      // Di chuyển file vào thư mục chính
-      fs.copyFile(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
-      });
-    });
-  });
-}
-
-var nameTexts = () => {
-
-fs.readdir(dir1, (err, files) => {
-  if (err) {
-    console.error(`Error reading directory ${dir1}: ${err}`);
-    return;
-  }
-
-  files.forEach((file) => {
+    // Xác định kích thước của file
+    fs.stat(`${dir}/${file}`, (err, stat) => {
+      if (err) {
+        console.error(`Error getting file size for ${file}: ${err}`);
+        return;
+      }
 
       const firstLetter = file[0].toUpperCase();
 
       const sizeString = sortName(firstLetter);
-      if (!fs.existsSync(`${dir1}/${sizeString}`)) {
-        fs.mkdirSync(`${dir1}/${sizeString}`);
+
+
+       if(!stat.isDirectory()){
+        if (!fs.existsSync(`${dir}/${sizeString}`)) {
+          fs.mkdirSync(`${dir}/${sizeString}`);
+        }
       }
 
       // Di chuyển file vào thư mục chính
-      fs.copyFile(`${dir1}/${file}`, `${dir1}/${sizeString}/${file}`, (err) => {
+      fs.copyFile(`${dir}/${file}`, `${dir}/${sizeString}/${file}`,  (err) => {
+        if (err) {
+          console.error(`Error moving file ${file}: ${err}`);
+        }
       });
     });
   });
+});
 }
 
 module.exports = {
-  nameImages,
-  nameTexts
-};
+  getHeadName : getHeadName,
+  getMidName : getMidName,
+  getFinalName : getFinalName
+}
 

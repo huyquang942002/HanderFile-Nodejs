@@ -1,6 +1,11 @@
-const fs = require("fs");
-const path = require("path");
 
+const  a = require("./SortBySize.js")
+const  b  = require("./fileByName.js");
+const  c  = require("./fileByTime.js");
+const  d  = require("./fileByType.js");
+
+
+var src = process.argv.slice(2,3).join("");
 
 const { Command } = require("commander");
 const program = new Command();
@@ -18,19 +23,19 @@ const options = program.opts();
 var myArgs = process.argv.length;
 
 if (options.type && myArgs <= 5) {
-  const {type} = require("./SortByType.js")
+  d.fileType(src);
 }
 
 if (options.size && myArgs < 5) {
-  const { size } = require("./SortBySize.js");
+  d.fileSize(src);
 }
 
 if (options.modify && myArgs < 5) {
-  const { modify } = require("./SortByTime.js");
+  c.fileModify(src);
 }
 
 if (options.name && myArgs < 5) {
-  const { name } = require("./AllSortByName.js");
+    b.fileName(src);
 }
 
 let check = process.argv.slice(2, 3).join("");
@@ -43,17 +48,7 @@ if (check == "./" && myArgs < 4) {
   console.log("please add options");
 }
 
-// switch (argWithSpace) {
-//   case `${myArg} --type images,texts --name`:
-//     const { type } = require("./SortByType.js");
-//     const { nameImages } = require("./SortByName.js");s
-//     const { nameTexts } = require("./SortByName.js");
-//     break;
-
-// }
 
 
-for (var i = 0; i < 1; i++) {
-  const { typeName } = require("./typename.js");
-}
+
 

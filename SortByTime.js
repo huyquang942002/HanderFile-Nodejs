@@ -1,5 +1,8 @@
 const fs = require("fs");
 
+const fss = require("fs-extra");
+
+
 const today = new Date();
 
 const thisWeek = new Date();
@@ -11,31 +14,55 @@ thisMonth.setDate(1);
 const thisYear = new Date();
 thisYear.setMonth(0, 1);
 
-var myArg = process.argv.slice(2, 3).join("");
 
-const dir = myArg;
 
 function sort(mtime) {
-  // console.log('mtime : ' + mtime)
     if (mtime <= today && mtime > thisWeek) {
-    // console.log("today : " + today);
     return `today`;
   } else if (mtime <= thisWeek && mtime > thisMonth) {
-    // console.log("thiswek : " + thisWeek);
     return `this_week`;
   } else if (mtime <= thisMonth && mtime > thisYear) {
-    // console.log("month : " + thisMonth);
     return `this_month`;
   } else if (mtime <= thisYear) {
-    // console.log("year : " + thisYear);
     return `this_year`;
   } else {
     return ``;
   }
 }
 
+const getFinalModify = (dir)=>{
+  fs.readdir(dir,(err,files)=>{
+    for(const file of files){
+      const filePath = `${dir}/${file}`;
+
+      fs.stat(filePath,(err,stat)=>{
+        if(stat.isDirectory()){
+            getHeadModify(filePath);
+            getMidModify(filePath);
+        }
+      })
+    }
+  })
+}
+
+const getMidModify = (dir)=>{
+  fs.readdir(dir,(err,files)=>{
+    for(const file of files){
+      const filePath = `${dir}/${file}`;
+
+      fs.stat(filePath,(err,stat)=>{
+        if(stat.isDirectory()){
+            getHeadModify(filePath);
+        }
+      })
+    }
+  })
+}
+
 // Read the contents of the directory
-var modify = fs.readdir(dir, (err, files) => {
+const  getHeadModify = (dir)=>{
+
+ fs.readdir(dir, (err, files) => {
   if (err) {
     console.error(`Error reading directory ${dir}: ${err}`);
     return;
@@ -52,13 +79,14 @@ var modify = fs.readdir(dir, (err, files) => {
       // Tạo thư mục mới theo ngày tuần tháng năm
       const sizeString = sort(stat.mtime);
       
-      if (!fs.existsSync(`${dir}/${sizeString}`)) {
-        fs.mkdirSync(`${dir}/${sizeString}`);
-
+      if(!stat.isDirectory()){
+        if (!fs.existsSync(`${dir}/${sizeString}`)) {
+          fs.mkdirSync(`${dir}/${sizeString}`);
+        }
       }
 
       // Di chuyển file vào thư mục chính
-      fs.copyFile(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
+      fs.copyFile(`${dir}/${file}`, `${dir}/${sizeString}/${file}`,  (err) => {
         if (err) {
           console.error(`Error moving file ${file}: ${err}`);
         }
@@ -66,7 +94,10 @@ var modify = fs.readdir(dir, (err, files) => {
     });
   });
 });
+}
 
 module.exports = {
-  modify,
+  getHeadModify : getHeadModify,
+  getMidModify : getMidModify,
+  getFinalModify : getFinalModify,
 };

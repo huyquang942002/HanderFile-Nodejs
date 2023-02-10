@@ -1,8 +1,45 @@
 const fs = require("fs");
 
-var myArg = process.argv.slice(2, 3).join("");
+const fss = require('fs-extra')
 
-const dir = myArg;
+
+var getFinalSize = (dir)=>{
+  fs.readdir(dir,(err,files)=>{
+    for(const file of files){
+      const filePath = `${dir}/${file}`;
+
+      fs.stat(filePath,(err,stats)=>{
+        const dirChilds = filePath.split();
+          if(stats.isDirectory()){
+            for(const dirChild of dirChilds){
+              getHeadSize(dirChild)
+              getMidSize(dirChild)
+            }
+          }
+      })
+    }
+  })
+}
+
+
+var getMidSize = (dir)=>{
+  fs.readdir(dir,(err,files)=>{
+    for(const file of files){
+      const filePath = `${dir}/${file}`;
+
+      fs.stat(filePath,(err,stats)=>{
+        const dirChilds = filePath.split();
+          if(stats.isDirectory()){
+            for(const dirChild of dirChilds){
+              getHeadSize(dirChild)
+            }
+          }
+      })
+    }
+  })
+}
+
+
 
 function sizeToString(size) {
 
@@ -14,13 +51,17 @@ function sizeToString(size) {
       return `medium`;
     } else if (size > 1024 * 1024 * 5 && size < 1024 * 1024 * 10) {
       return `Big`;
-    } else {
+    } else if (size >= 1024 * 1024 * 10){
       return `Verybig`;
+    }else{
+      return ``;
     }
 }
 
 // Read the contents of the directory
-var size =  fs.readdir(dir, (err, files) => {
+const getHeadSize = (dir) => {
+
+ fs.readdir(dir, (err, files) => {
   if (err) {
     console.error(`Error reading directory ${dir}: ${err}`);
     return;
@@ -36,8 +77,11 @@ var size =  fs.readdir(dir, (err, files) => {
 
       // Tạo thư mục mới cho file nếu nó chưa tồn tại
       const sizeString = sizeToString(stat.size);
-      if (!fs.existsSync(`${dir}/${sizeString}`)) {
-        fs.mkdirSync(`${dir}/${sizeString}`);
+
+      if(!stat.isDirectory()){
+        if (!fs.existsSync(`${dir}/${sizeString}`)) {
+          fs.mkdirSync(`${dir}/${sizeString}`);
+        }
       }
 
       // Di chuyển file vào thư mục chính
@@ -49,7 +93,26 @@ var size =  fs.readdir(dir, (err, files) => {
     });
   });
 });
-
-module.exports ={
-    size,
 }
+
+module.exports = {
+  getHeadSize : getHeadSize,
+  getMidSize : getMidSize,
+  getFinalSize : getFinalSize
+}
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
