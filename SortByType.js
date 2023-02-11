@@ -16,6 +16,12 @@ const path = require("path");
 
   var images = str.find((element) => element === "images");
 
+  var bash = str.find((element) => element === "bash");
+
+  var order = str.find((element) => element === "order");
+
+
+
 // ./c
 
 
@@ -26,10 +32,12 @@ function sortName(lastPath) {
   } else if (lastPath === ".png" || lastPath === ".jpg") {
     return `${images}`;
   } else if (lastPath === ".sh") {
-    return `bash`;
+    return `${bash}`;
+  }else if (lastPath === "") {
+    return `${order}`;
   }else{
-    return ``;
-  }
+  return ``;
+}
 }
 
 const getFinalType = (dir) =>{
@@ -88,8 +96,10 @@ fs.readdir(dir, (err, files) => {
     var sizeString = sortName(lastPath);
     
     if(!stat.isDirectory()){
-      if (!fs.existsSync(`${dir}/${sizeString}`)) {
-        fs.mkdirSync(`${dir}/${sizeString}`);
+      if(sizeString === images || sizeString === texts || sizeString === bash){
+        if (!fs.existsSync(`${source}/${sizeString}`)) {
+          fs.mkdirSync(`${source}/${sizeString}`);
+        }
       }
     }
     

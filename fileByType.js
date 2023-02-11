@@ -16,6 +16,12 @@ const path = require("path");
 
   var images = str.find((element) => element === "images");
 
+  var bash = str.find((element) => element === "bash");
+
+  var order = str.find((element) => element === "order");
+
+
+
 // ./c
 
 
@@ -26,10 +32,12 @@ function sortName(lastPath) {
   } else if (lastPath === ".png" || lastPath === ".jpg") {
     return `${images}`;
   } else if (lastPath === ".sh") {
-    return `bash`;
+    return `${bash}`;
+  }else if (lastPath === "") {
+    return `${order}`;
   }else{
-    return ``;
-  }
+  return ``;
+}
 }
 
 
@@ -58,14 +66,18 @@ fs.readFile(dir, (err, files) => {
       const parts = dir.split("/");
 
       const sourceFile = parts[parts.length - 1];
-
+      
+      // .txt
       var lastPath = path.extname(sourceFile);
 
       var sizeString = sortName(lastPath);
 
-      if (!fs.existsSync(`${source}/${sizeString}`)) {
-        fs.mkdirSync(`${source}/${sizeString}`);
+      if(sizeString === images || sizeString === texts || sizeString === bash){
+        if (!fs.existsSync(`${source}/${sizeString}`)) {
+          fs.mkdirSync(`${source}/${sizeString}`);
+        }
       }
+
 
     fs.copyFile(`${source}/${sourceFile}`, `${source}/${sizeString}/${sourceFile}`,  (err) => {
       if (err) {
