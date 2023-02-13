@@ -12,14 +12,38 @@ const  folderType  = require("./SortByType.js");
 
 
 
+
 const { Command } = require("commander");
 const program = new Command();
 
+
+let option = []
+
+let status = 0;
+
+
 program
-  .option("--type, --type", "handle file")
+  .option("--type, --type <value>", "handle file")
   .option("--size, --size", "handle file")
   .option("--modify, --modify", "handle file")
-  .option("--name, --name", "handle file");
+  .option("--name, --name", "handle file")
+  .on("option:type", async () => {
+    option.push("--type");
+  })
+  .on("option:size", async () => {
+      option.push("--size");
+  })
+  .on("option:modify", async () => {
+      option.push("--modify");
+  })
+  .on("option:name", async () => {
+      option.push("--name");
+  })
+
+var src = process.argv.slice(2,3).join("");
+
+var src1 = process.argv.slice(3,4).join("");
+
 
 program.parse(process.argv);
 
@@ -27,9 +51,7 @@ const options = program.opts();
 
 var myArgs = process.argv.length;
 
-var src = process.argv.slice(2,3).join("");
 
-var src1 = process.argv.slice(3,4).join("");
 
 const parts = src.split("/");
 
@@ -68,14 +90,12 @@ if(myArgs > 2 && !sourceFile.includes('.') && !src1){
   console.log("please add options")
 }
 
-
-
 if(!src){
   console.log("please add input")
 }
 
 
-function checkType(type) {
+const checkType1 = (type)=> {
   if (type === "images" || type === "texts" || type === "bash" || type ==="order") {
     return true;
   } else {
@@ -83,7 +103,7 @@ function checkType(type) {
   }
 }
 
-// handle folder and file
+const checkType = ()=>{
 
 for(var i = 1 ; i<process.argv.length;i++){
   if(process.argv[i]=="--type"){
@@ -94,13 +114,15 @@ for(var i = 1 ; i<process.argv.length;i++){
       }else{
         var b = a.split(',');
         b.forEach((x)=>{
-          checkType(x)
+          checkType1(x)
         })
       }
-
-      
     }
 }
+}
+
+checkType();
+
 
 var count = 0;
 
@@ -127,4 +149,118 @@ for(var i = 0 ;i<process.argv.length; i++){
   }
 }
 
+
+const runType = async (checkIndex,src)=>{
+    switch(checkIndex){
+
+      case 0: await folderType.getHeadType(src);
+      break;
+
+      case 1: await setTimeout(()=>{
+        folderType.getMidType(src)
+      },100) 
+      break;
+
+      case 2: await setTimeout(()=>{
+        folderType.getFinalType(src)
+      },200) 
+      break;
+
+      default:
+        break;
+    }
+}
+
+const runName = async (checkIndex,src)=>{
+  switch(checkIndex){
+
+    case 0: await folderName.getHeadName(src);
+    break;
+
+    case 1: await setTimeout(()=>{
+      folderName.getMidName(src);
+    },100) 
+    break;
+
+    case 2: await setTimeout(()=>{
+      folderName.getFinalName(src);
+    },100) 
+    break;
+
+    default:
+      break;
+  }
+}
+
+const runSize = async (checkIndex,src)=>{
+  switch(checkIndex){
+
+    case 0: await folderSize.getHeadSize(src);
+    break;
+
+    case 1: await setTimeout(()=>{
+      folderSize.getMidSize(src);
+    },100) 
+    break;
+
+    case 2: await setTimeout(()=>{
+      folderSize.getFinalSize(src);
+    },100) 
+    break;
+
+    default:
+      break;
+  }
+}
+
+const runModify = async (checkIndex,src)=>{
+  switch(checkIndex){
+
+    case 0: await folderModify.getHeadModify(src);
+    break;
+
+    case 1: await setTimeout(()=>{
+      folderModify.getMidModify(src);
+    },100) 
+    break;
+
+    case 2: await setTimeout(()=>{
+      folderModify.getFinalModify(src);
+    },100) 
+    break;
+
+    default:
+      break;
+  }
+}
+
+const start = async ()=>{
+
+for (const item of option) {
+  switch (item) {
+      case "--type":
+          console.log(status);
+          await runType(status, src)
+          break;
+      case "--modify":
+          console.log(status);
+          await runModify(status, src)
+          break;
+      case "--name":
+          console.log(status);  
+          await runName(status, src)
+          break;
+      case "--size":
+          console.log(status);
+          await runSize(status, src)
+          break;
+      default:
+          console.log(status);
+          break;
+  }
+  status++
+}
+}
+
+start();
 

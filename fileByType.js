@@ -1,28 +1,67 @@
 const fs = require("fs");
 
-const fss= require("fs-extra");
-
 
 const path = require("path");
 
 
-  // ./c
 
-  var myArgs = process.argv.slice(4).join("");
+for(var i = 1 ; i < process.argv.length ; i++){
+    
+  if(process.argv[i]==="--type"){
 
-  var str = myArgs.split(/[,-]/);
-  
-  var texts = str.find((element) => element === "texts");
+    if(!process.argv[i+1]){
+      console.log("Please add type is : : [ images , texts , bash ]");
+    }else{
+      var myArgs = process.argv[i+1];
 
-  var images = str.find((element) => element === "images");
+      var str = myArgs.split(/[,-]/);
 
-  var bash = str.find((element) => element === "bash");
+      var texts = str.find((element) => element === "texts");
+    
+      var images = str.find((element) => element === "images");
+    
+      var bash = str.find((element) => element === "bash");
+    
+      var order = str.find((element) => element === "order");
 
-  var order = str.find((element) => element === "order");
+    }
+  }
+}
 
+const fileFinalType = (dir) =>{
+  fs.readdir(dir,(err,files)=>{
+    for(const file of files){
+      const filePath = `${dir}/${file}`;
 
+      fs.stat(filePath,(err,stat)=>{
+        if(stat.isDirectory()){
+          const dirChilds = filePath.split();
+          for(const dirChild of dirChilds){
+            fileHeadType(dirChild);
+            fileMidType(dirChild);
+          }
+        }
+      })
+    }
+  })
+}
 
-// ./c
+const fileMidType = (dir)=>{
+  fs.readdir(dir,(err,files)=>{
+    for(const file of files){
+      const filePath = `${dir}/${file}`;
+
+      fs.stat(filePath,(err,stat)=>{
+        if(stat.isDirectory){
+          const dirChilds = filePath.split();
+          for(const dirChild of dirChilds){
+            fileHeadType(dirChild);
+          }
+        }
+      })
+    }
+  })
+}
 
 
 function sortName(lastPath) {
@@ -42,7 +81,7 @@ function sortName(lastPath) {
 
 
 // Read the contents of the directory
-const fileType =  (dir) => {
+const fileHeadType =  (dir) => {
 
 fs.readFile(dir, (err, files) => {
   if (err) {
@@ -92,5 +131,7 @@ fs.readFile(dir, (err, files) => {
 
 
 module.exports = {
-    fileType,
+  fileHeadType,
+  fileMidType,
+  fileFinalType
   };

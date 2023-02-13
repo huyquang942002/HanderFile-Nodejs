@@ -85,7 +85,7 @@ const getHeadSize = (dir) => {
       }
 
       // Di chuyển file vào thư mục chính
-      fs.copyFile(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
+      fs.rename(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
         if (err) {
           console.error(`Error moving file ${file}: ${err}`);
         }

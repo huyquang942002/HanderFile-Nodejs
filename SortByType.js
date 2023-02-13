@@ -6,19 +6,28 @@ const fss= require("fs-extra");
 const path = require("path");
 
 
-  // ./c
+  for(var i = 1 ; i < process.argv.length ; i++){
+    
+    if(process.argv[i]==="--type"){
 
-  var myArgs = process.argv.slice(4).join("");
-
-  var str = myArgs.split(/[,-]/);
+      if(process.argv[i+1]){
+        var myArgs = process.argv[i+1];
   
-  var texts = str.find((element) => element === "texts");
+        var str = myArgs.split(/[,-]/);
 
-  var images = str.find((element) => element === "images");
+        var texts = str.find((element) => element === "texts");
+      
+        var images = str.find((element) => element === "images");
+      
+        var bash = str.find((element) => element === "bash");
+      
+        var order = str.find((element) => element === "order");
 
-  var bash = str.find((element) => element === "bash");
+      }
+    }
+  }
 
-  var order = str.find((element) => element === "order");
+  
 
 
 
@@ -33,7 +42,7 @@ function sortName(lastPath) {
     return `${images}`;
   } else if (lastPath === ".sh") {
     return `${bash}`;
-  }else if (lastPath === "") {
+  }else if (lastPath === " ") {
     return `${order}`;
   }else{
   return ``;
@@ -97,14 +106,14 @@ fs.readdir(dir, (err, files) => {
     
     if(!stat.isDirectory()){
       if(sizeString === images || sizeString === texts || sizeString === bash){
-        if (!fs.existsSync(`${source}/${sizeString}`)) {
-          fs.mkdirSync(`${source}/${sizeString}`);
+        if (!fs.existsSync(`${dir}/${sizeString}`)) {
+          fs.mkdirSync(`${dir}/${sizeString}`);
         }
       }
     }
     
     // Di chuyển file vào thư mục chính
-    fs.copyFile(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
+    fs.rename(`${dir}/${file}`, `${dir}/${sizeString}/${file}`, (err) => {
     });
   });
 })
@@ -115,5 +124,5 @@ fs.readdir(dir, (err, files) => {
 module.exports = {
   getHeadType,
   getMidType,
-  getFinalType
+  getFinalType,
 };
